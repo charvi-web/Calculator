@@ -1,5 +1,3 @@
-/* ================= CALCULATOR LOGIC ================= */
-
 let currentInput = '';
 let previousInput = '';
 let operation = null;
@@ -7,181 +5,100 @@ let shouldResetOnNextInput = false;
 
 const resultDisplay = document.getElementById('result');
 const expressionDisplay = document.getElementById('expression');
+const clickSound = document.getElementById('click-sound');
 
-// Buttons
 const numberButtons = document.querySelectorAll('.number');
 const operatorButtons = document.querySelectorAll('.operator');
 const resultButton = document.querySelector('.result-btn');
+const clearButton = document.querySelector('.clear');
+const themeSelect = document.getElementById('theme-select');
 
-// OPTIONAL buttons (safe check)
-const closeButton = document.querySelector('.close');
-const minimizeButton = document.querySelector('.minimize');
+// Button click with ripple + sound
+function buttonClickEffect(btn) {
+    clickSound.currentTime = 0;
+    clickSound.play();
+    btn.classList.add('ripple');
+    setTimeout(() => btn.classList.remove('ripple'), 300);
+}
 
-/* ========== NUMBER BUTTONS ========== */
-numberButtons.forEach(button => {
-  button.addEventListener('click', () => {
-    const number = button.textContent;
-
-    if (shouldResetOnNextInput) {
-      currentInput = '';
-      previousInput = '';
-      operation = null;
-      shouldResetOnNextInput = false;
-    }
-
-    if (currentInput === '0' && number === '0') return;
-
-    currentInput += number;
-    updateDisplay();
-  });
+// Number
+numberButtons.forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+        buttonClickEffect(btn);
+        if(shouldResetOnNextInput){ clear(); shouldResetOnNextInput=false; }
+        currentInput += btn.textContent;
+        updateDisplay();
+    });
 });
 
-/* ========== OPERATOR BUTTONS ========== */
-operatorButtons.forEach(button => {
-  button.addEventListener('click', () => {
-    const op = button.textContent;
-    if (currentInput === '') return;
-
-    shouldResetOnNextInput = false;
-
-    if (previousInput !== '') {
-      calculate();
-    }
-
-    operation = op;
-    previousInput = currentInput;
-    currentInput = '';
-    updateDisplay();
-  });
+// Operator
+operatorButtons.forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+        buttonClickEffect(btn);
+        if(!currentInput) return;
+        if(previousInput) calculate();
+        operation = btn.textContent;
+        previousInput = currentInput;
+        currentInput='';
+        updateDisplay();
+    });
 });
 
-/* ========== RESULT BUTTON ========== */
-resultButton.addEventListener('click', () => {
-  calculate();
-  operation = null;
-  shouldResetOnNextInput = true;
-});
-
-/* ========== OPTIONAL WINDOW BUTTONS ========== */
-if (closeButton) {
-  closeButton.addEventListener('click', () => {
-    alert('Calculator closed!');
-  });
-}
-
-if (minimizeButton) {
-  minimizeButton.addEventListener('click', () => {
-    alert('Calculator minimized!');
-  });
-}
-
-/* ========== CALCULATE FUNCTION ========== */
-function calculate() {
-  if (previousInput === '' || currentInput === '' || operation === null) return;
-
-  const prev = parseFloat(previousInput);
-  const current = parseFloat(currentInput);
-  let result;
-
-  switch (operation) {
-    case '+':
-      result = prev + current;
-      break;
-    case '-':
-      result = prev - current;
-      break;
-    case '×':
-      result = prev * current;
-      break;
-    case '/':
-      if (current === 0) {
-        alert('Cannot divide by zero!');
-        clear();
-        return;
-      }
-      result = prev / current;
-      break;
-  }
-
-  currentInput = result.toString();
-  previousInput = '';
-  updateDisplay();
-}
-
-/* ========== UPDATE DISPLAY ========== */
-function updateDisplay() {
-  resultDisplay.textContent = currentInput || '0';
-
-  if (previousInput && operation) {
-    expressionDisplay.textContent = `${previousInput} ${operation} ${currentInput || ''}`;
-  } else {
-    expressionDisplay.textContent = '';
-  }
-}
-
-/* ========== CLEAR ========== */
-function clear() {
-  currentInput = '';
-  previousInput = '';
-  operation = null;
-  updateDisplay();
-}
-
-/* ========== KEYBOARD SUPPORT ========== */
-document.addEventListener('keydown', e => {
-  if (e.key >= '0' && e.key <= '9') {
-    if (shouldResetOnNextInput) {
-      clear();
-      shouldResetOnNextInput = false;
-    }
-    currentInput += e.key;
-    updateDisplay();
-  }
-
-  if (['+', '-', '*', '/'].includes(e.key)) {
-    if (currentInput === '') return;
-    if (previousInput !== '') calculate();
-
-    operation = e.key === '*' ? '×' : e.key;
-    previousInput = currentInput;
-    currentInput = '';
-    updateDisplay();
-  }
-
-  if (e.key === 'Enter' || e.key === '=') {
+// Result
+resultButton.addEventListener('click', ()=>{
+    buttonClickEffect(resultButton);
     calculate();
-    operation = null;
-    shouldResetOnNextInput = true;
-  }
+    shouldResetOnNextInput=true;
+});
 
-  if (e.key === 'Escape' || e.key.toLowerCase() === 'c') {
+// Clear
+clearButton.addEventListener('click', ()=>{
+    buttonClickEffect(clearButton);
     clear();
-  }
 });
 
-/* ================= DRAG (MOVE) FUNCTIONALITY ================= */
-
-const calculator = document.getElementById('calculator');
-
-let isDragging = false;
-let offsetX = 0;
-let offsetY = 0;
-
-calculator.addEventListener('mousedown', e => {
-  isDragging = true;
-  offsetX = e.clientX - calculator.offsetLeft;
-  offsetY = e.clientY - calculator.offsetTop;
+// Theme toggle
+themeSelect.addEventListener('change', ()=>{
+    document.body.className = themeSelect.value;
 });
 
-document.addEventListener('mousemove', e => {
-  if (!isDragging) return;
-  calculator.style.left = e.clientX - offsetX + 'px';
-  calculator.style.top = e.clientY - offsetY + 'px';
-});
+// Calculate
+function calculate(){
+    if(!previousInput || !currentInput || !operation) return;
+    const prev=parseFloat(previousInput);
+    const curr=parseFloat(currentInput);
+    let res;
+    switch(operation){
+        case '+': res = prev+curr; break;
+        case '-': res = prev-curr; break;
+        case '×': res = prev*curr; break;
+        case '/': 
+            if(curr===0){ alert("Cannot divide by zero!"); clear(); return;}
+            res = prev/curr; break;
+    }
+    currentInput = res.toString();
+    previousInput='';
+    animateResult();
+    updateDisplay();
+}
 
-document.addEventListener('mouseup', () => {
-  isDragging = false;
-});
+// Update Display
+function updateDisplay(){
+    resultDisplay.textContent = currentInput || '0';
+    expressionDisplay.textContent = previousInput && operation ? `${previousInput} ${operation}` : '';
+}
 
-/* ========== INITIALIZE ========== */
-updateDisplay();
+// Clear
+function clear(){
+    currentInput=''; previousInput=''; operation=null; updateDisplay();
+}
+
+// Animate Result
+function animateResult(){
+    resultDisplay.style.transform='scale(1.2)';
+    resultDisplay.style.color='var(--particle-color)';
+    setTimeout(()=>{
+        resultDisplay.style.transform='scale(1)';
+        resultDisplay.style.color='var(--text-color)';
+    },300);
+}

@@ -1,117 +1,130 @@
-/* ========== RESET ========== */
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
+:root {
+    --bg-color: #ffe0e0;
+    --btn-color: #fff6f6;
+    --btn-shadow: #62405B;
+    --text-color: #333;
+    --display-bg: #f5f5f5;
+    --particle-color: #ff69b4;
 }
 
-/* ========== BODY ========== */
 body {
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-  background: #efecec;
-  min-height: 100vh;
-  position: relative;
+    font-family: 'Segoe UI', sans-serif;
+    background: #f0f0f0;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    min-height: 100vh;
+    padding: 20px;
 }
 
-/* ========== CALCULATOR CONTAINER ========== */
+/* Theme selection */
+.theme-controls {
+    position: fixed;
+    top: 10px;
+    right: 10px;
+    z-index: 100;
+    font-weight: bold;
+}
+
+/* Calculator Boundary + 3D look */
 .calculator {
-  position: absolute;              /* required for dragging */
-  width: 320px;
-  left: 50%;
-  top: 120px;
-  transform: translateX(-50%);
-  cursor: move;
+    width: 350px;
+    background: var(--bg-color);
+    border: 4px solid var(--btn-shadow);
+    border-radius: 20px;
+    padding: 20px;
+    box-shadow: 8px 8px 0 var(--btn-shadow), inset -2px -2px 10px rgba(0,0,0,0.1);
+    position: relative;
 }
 
-/* ========== IMAGE BODY ========== */
-.calc-bg {
-  width: 100%;
-  display: block;
-  pointer-events: none;           /* allow clicks to pass through */
-}
-
-/* ========== HIDE OLD HEADER / ICONS ========== */
-.header,
-.logo-box,
-.logo-icon,
-.cal-icon {
-  display: none;
-}
-
-/* ========== DISPLAY ========== */
+/* Display */
 .display {
-  position: absolute;
-  top: 65px;
-  left: 28px;
-  width: 264px;
-  background: transparent;
-  text-align: right;
+    background: var(--display-bg);
+    border-radius: 12px;
+    padding: 15px;
+    text-align: right;
+    margin-bottom: 20px;
 }
-
 .result {
-  font-size: 42px;
-  font-weight: 700;
-  color: #2e2e2e;
+    font-size: 36px;
+    font-weight: bold;
+    color: var(--text-color);
+    transition: transform 0.2s ease, color 0.2s ease;
 }
-
 .expression {
-  font-size: 12px;
-  color: #666;
+    font-size: 14px;
+    color: #666;
 }
 
-/* ========== BUTTON GRID ========== */
+/* Buttons Grid */
 .buttons {
-  position: absolute;
-  top: 145px;
-  left: 28px;
-  width: 264px;
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 12px;
-  background: transparent;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
 }
-
-/* ========== BUTTONS (INVISIBLE, IMAGE HANDLES DESIGN) ========== */
 .btn {
-  width: 56px;
-  height: 48px;
-  background: transparent;
-  border: none;
-  box-shadow: none;
-  font-size: 18px;
-  font-weight: 700;
-  color: transparent;            /* hides text */
-  cursor: pointer;
+    background: var(--btn-color);
+    border: 3px solid var(--btn-shadow);
+    border-radius: 12px;
+    font-size: 20px;
+    font-weight: bold;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    color: var(--text-color);
+    transition: transform 0.1s ease, box-shadow 0.1s ease;
+}
+.btn:active {
+    transform: translateY(2px);
+    box-shadow: 2px 2px 0 var(--btn-shadow) inset;
 }
 
-/* ========== RESULT BUTTON ========== */
-.result-btn {
-  grid-column: span 2;
-  width: 100%;
-  height: 48px;
+/* Ripple + Particle Effect */
+.btn::after {
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0; left: 0;
+    background: var(--particle-color);
+    opacity: 0;
+    transition: opacity 0.3s, transform 0.4s;
+    border-radius: 50%;
+}
+.btn.ripple::after {
+    opacity: 0.5;
+    transform: scale(2);
 }
 
-/* ========== MOBILE RESPONSIVE ========== */
-@media (max-width: 420px) {
-  .calculator {
-    width: 280px;
-  }
+/* Theme Styles */
+body.pink-retro {
+    --bg-color: #ffe0e0;
+    --btn-color: #fff6f6;
+    --btn-shadow: #62405B;
+    --text-color: #333;
+    --display-bg: #f5f5f5;
+    --particle-color: #ff69b4;
+}
+body.neon {
+    --bg-color: #0d0d0d;
+    --btn-color: #1a1aff;
+    --btn-shadow: #39ff14;
+    --text-color: #39ff14;
+    --display-bg: #111;
+    --particle-color: #39ff14;
+}
+body.minimal {
+    --bg-color: #f0f0f0;
+    --btn-color: #fff;
+    --btn-shadow: #ccc;
+    --text-color: #333;
+    --display-bg: #e0e0e0;
+    --particle-color: #888;
+}
 
-  .display {
-    top: 58px;
-    left: 24px;
-    width: 232px;
-  }
-
-  .buttons {
-    top: 130px;
-    left: 24px;
-    width: 232px;
-    gap: 10px;
-  }
-
-  .btn {
-    width: 50px;
-    height: 44px;
-  }
+/* Responsive */
+@media (max-width: 400px) {
+    .calculator { width: 90%; padding: 15px; }
+    .btn { font-size: 18px; padding: 12px 0; }
+    .result { font-size: 28px; }
 }
