@@ -3,33 +3,24 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Calculator</title>
+    <title>Movable Calculator</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div class="calculator">
-        <div class="header">
-            <div class="header-left-section">
-                <div class="logo-box">
-                    <img src="images/icon.png" alt="logo" class="logo-icon">
-                </div>
-            </div>
-            <div class="header-center">
-                <img src="images/rocket.png" alt="calculator" class="cal-icon">
-                <span class="title">calculator</span>
-                <button class="window-btn close-center">✕</button>
-            </div>
-            <div class="header-right-section">
-                <button class="window-btn minimize">−</button>
-                <button class="window-btn close">✕</button>
-            </div>
-        </div>
-        
+
+    <!-- Draggable Calculator -->
+    <div class="calculator" id="calculator">
+
+        <!-- Calculator Image -->
+        <img src="images/cute-calculator.png" alt="calculator" class="calc-bg">
+
+        <!-- Display -->
         <div class="display">
-            <div class="result" id="result">600</div>
-            <div class="expression" id="expression">400 + 200</div>
+            <div class="result" id="result">0</div>
+            <div class="expression" id="expression"></div>
         </div>
-        
+
+        <!-- Buttons -->
         <div class="buttons">
             <button class="btn number">7</button>
             <button class="btn number">8</button>
@@ -46,12 +37,14 @@
             <button class="btn number">3</button>
             <button class="btn operator">×</button>
             
-            <button class="btn result-btn">Result</button>
+            <button class="btn clear">C</button>
             <button class="btn number">0</button>
             <button class="btn operator">/</button>
+            <button class="btn result-btn">=</button>
         </div>
+
     </div>
-    
+
     <script src="script.js"></script>
 </body>
 </html>

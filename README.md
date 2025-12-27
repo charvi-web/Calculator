@@ -1,214 +1,183 @@
-# 🧮 Calculator App
+🧮 Movable Calculator App
 
-A beautifully designed calculator with a retro-inspired UI featuring a custom window interface, smooth animations, and full keyboard support. Built as Day 1 of the 30 Days 30 Projects challenge.
+A beautifully designed movable (draggable) calculator with a cute, image-based retro UI. The calculator can be freely dragged anywhere on the screen, providing a desktop-like interactive experience. Built using HTML, CSS, and Vanilla JavaScript as part of a hands-on project challenge.
 
-<p align="center">
-  <img src="images/calculator.png" alt="Calculator Preview" width="400">
-</p>
+<p align="center"> <img src="images/cute-calculator.png" alt="Calculator Preview" width="400"> </p>
+✨ Features
+🎨 Design
 
-## ✨ Features
+Cute Image-Based UI: Custom calculator design using a background image
 
-### 🎨 Design
-- **Retro-Inspired UI**: Custom window interface with pink and cream color scheme
-- **Smooth Animations**: Hover effects and button press feedback
-- **Responsive Layout**: Adapts to different screen sizes (mobile-friendly)
-- **Custom Header**: Window controls (minimize/close buttons) and branding
+Retro Look & Feel: Soft pastel colors and playful layout
 
-### 🔢 Functionality
-- **Basic Arithmetic Operations**: Addition (+), Subtraction (-), Multiplication (×), Division (/)
-- **Real-time Display**: Shows current input and full expression
-- **Continuous Calculations**: Chain multiple operations together
-- **Error Handling**: Prevents division by zero and invalid operations
-- **Smart Input Reset**: Automatically clears after getting a result
+Smooth Interaction: Clean transitions and responsive clicks
 
-### ⌨️ Keyboard Support
-- **Number Keys** (0-9): Input numbers
-- **Operator Keys** (+, -, *, /): Perform operations
-- **Enter/=**: Calculate result
-- **Escape/C**: Clear calculator
+Minimal UI: No unnecessary icons or headers for a clean appearance
 
-### 📱 Dual Implementation
-- **Web Version**: Interactive browser-based calculator (HTML/CSS/JS)
-- **Python Version**: Command-line calculator with additional power operator (**)
+🖱️ Movable / Draggable Window ⭐
 
-## 🚀 Getting Started
+Drag Anywhere: Click and drag the calculator to move it across the screen
 
-### Prerequisites
-- Modern web browser (Chrome, Firefox, Safari, Edge)
-- Python 3.x (for Python version)
+Desktop-like Experience: Mimics movable app windows
 
-### Installation
+Mouse-Based Drag Support: Smooth and responsive movement
 
-1. **Clone the repository**
-   ```bash
-   git clone https://github.com/Anjila-26/Pomodoro-Timer.git
-   cd day1
-   ```
+🔢 Functionality
 
-2. **Run Web Version**
-   - Simply open `index.html` in your web browser
-   - Or use a local server:
-     ```bash
-     # Python 3
-     python -m http.server 8000
-     
-     # Then open http://localhost:8000
-     ```
+Basic Arithmetic Operations: Addition (+), Subtraction (-), Multiplication (×), Division (/)
 
-3. **Run Python Version**
-   ```bash
-   python calculator.py
-   ```
+Real-time Display: Shows current input and expression
 
-## 📂 Project Structure
+Continuous Calculations: Chain multiple operations smoothly
 
-```
-day1/
-├── index.html              # Main HTML structure
-├── style.css              # Styling and animations
-├── script.js              # Calculator logic and event handlers
-├── calculator.py          # Python CLI version
-├── README.md              # Documentation
+Error Handling: Prevents division by zero
+
+Smart Input Reset: Clears automatically after result when starting a new calculation
+
+⌨️ Keyboard Support
+
+Number Keys (0–9): Input numbers
+
+Operators (+, -, *, /): Perform calculations
+
+Enter / =: Calculate result
+
+Escape / C: Clear calculator
+
+🚀 Getting Started
+Prerequisites
+
+Any modern web browser (Chrome, Firefox, Edge, Safari)
+
+Installation
+
+Clone the repository
+
+git clone https://github.com/YOUR-USERNAME/Calculator.git
+cd Calculator
+
+
+Run the Project
+
+Simply open index.html in your browser
+OR
+
+Use a local server:
+
+python -m http.server 8000
+
+
+Then open: http://localhost:8000
+
+📂 Project Structure
+Calculator/
+├── index.html        # Calculator structure
+├── style.css         # Image-based styling
+├── script.js         # Calculator logic + drag functionality
+├── README.md         # Documentation
 └── images/
-    ├── icon.png           # Logo icon
-    └── rocket.png         # Calculator header icon
-```
+    └── cute-calculator.png
 
-## 🎯 How to Use
+🎯 How to Use
 
-### Web Calculator
+Click & Drag the calculator to move it anywhere on the screen
 
-1. **Click Numbers**: Click on number buttons (0-9) to input values
-2. **Select Operator**: Click +, -, ×, or / to choose operation
-3. **Get Result**: Click "Result" button or press Enter to calculate
-4. **Continue Calculation**: After a result, click an operator to continue with that result
-5. **Start Fresh**: After a result, click a number to start a new calculation
-6. **Clear**: Press Escape or C to clear everything
+Click Numbers (0–9) to enter values
 
-### Python Calculator
+Choose Operator (+, −, ×, /)
 
-1. Enter the first number
-2. Enter an operator (+, -, *, /, **)
-3. Enter the second number
-4. View the result
-5. Choose to continue or exit
+Press "=" or Enter to get result
 
-## 💻 Code Highlights
+Start New Calculation by pressing any number after result
 
-### Smart Input Reset
-```javascript
+Clear using C or Esc
+
+💻 Code Highlights
+🖱️ Drag & Move Functionality
+let isDragging = false;
+let offsetX, offsetY;
+
+calculator.addEventListener("mousedown", e => {
+  isDragging = true;
+  offsetX = e.clientX - calculator.offsetLeft;
+  offsetY = e.clientY - calculator.offsetTop;
+});
+
+document.addEventListener("mousemove", e => {
+  if (isDragging) {
+    calculator.style.left = e.clientX - offsetX + "px";
+    calculator.style.top = e.clientY - offsetY + "px";
+  }
+});
+
+document.addEventListener("mouseup", () => {
+  isDragging = false;
+});
+
+Smart Input Reset
 let shouldResetOnNextInput = false;
 
-// After calculation, flag is set to clear on next number input
 resultButton.addEventListener('click', () => {
-    calculate();
-    operation = null;
-    shouldResetOnNextInput = true;
+  calculate();
+  shouldResetOnNextInput = true;
 });
-```
 
-### Continuous Calculations
-```javascript
-operatorButtons.forEach(button => {
-    button.addEventListener('click', () => {
-        // Calculate previous operation before starting new one
-        if (previousInput !== '') {
-            calculate();
-        }
-        // Store operation and continue
-        operation = op;
-        previousInput = currentInput;
-        currentInput = '';
-    });
-});
-```
-
-### Division by Zero Protection
-```javascript
+Division by Zero Protection
 case '/':
-    if (current === 0) {
-        alert('Cannot divide by zero!');
-        clear();
-        return;
-    }
-    result = prev / current;
-    break;
-```
+  if (current === 0) {
+    alert('Cannot divide by zero!');
+    clear();
+    return;
+  }
 
-## 🎨 Styling Details
+🛠️ Technologies Used
 
-- **Color Palette**:
-  - Primary Pink: `#FF7980`
-  - Background: `#f7e9ea`
-  - Button Background: `#fff6f6`
-  - Border/Shadow: `#62405B`
-  - Button Plate: `#FBC5C5`
+HTML5 – Structure
 
-- **Typography**: System fonts (Apple System, Segoe UI, Roboto)
-- **Shadows**: Custom box shadows for depth and 3D effect
-- **Animations**: Smooth transitions on hover and click
+CSS3 – Image-based UI, layout, responsiveness
 
-## 📱 Responsive Design
+Vanilla JavaScript – Calculator logic, keyboard handling, drag functionality
 
-```css
-@media (max-width: 420px) {
-    .calculator { max-width: 320px; }
-    .btn { width: 56px; height: 52px; font-size: 18px; }
-    .result { font-size: 40px; }
-}
-```
+🔮 Future Enhancements
 
-## 🛠️ Technologies Used
+ Add decimal support
 
-- **HTML5**: Semantic structure
-- **CSS3**: Flexbox, Grid, Custom styling, Animations
-- **Vanilla JavaScript**: DOM manipulation, Event handling, Calculator logic
-- **Python**: CLI alternative implementation
+ Add backspace/delete key
 
-## 🔮 Future Enhancements
+ Add sound effects on button click
 
-- [ ] Add decimal point support
-- [ ] Implement backspace/delete functionality
-- [ ] Add memory functions (M+, M-, MR, MC)
-- [ ] Include scientific calculator mode
-- [ ] Add calculation history
-- [ ] Implement themes (light/dark mode)
-- [ ] Add parentheses support for complex expressions
-- [ ] Store calculation history in localStorage
+ Touch support for mobile dragging
 
-## 🐛 Known Issues
+ Save calculator position (localStorage)
 
-- Division operator shows `/` but internally uses `×` for multiplication display
-- No decimal point functionality currently implemented
-- Expression display shows partial expressions during chained calculations
+ Dark / light themes
 
-## 📝 Learning Outcomes
+ Scientific calculator mode
 
-This project helped practice:
-- Event-driven programming in JavaScript
-- State management in vanilla JS
-- CSS Grid and Flexbox layouts
-- Responsive design principles
-- Error handling and edge cases
-- Keyboard event handling
-- Creating custom UI components
+📝 Learning Outcomes
 
-## 👨‍💻 Author
+This project helped me learn:
 
-**Anjila**
-- GitHub: [@Anjila-26](https://github.com/Anjila-26)
-- Project: [30 Days 30 Projects - Programiz](https://github.com/Anjila-26/Pomodoro-Timer)
+JavaScript state management
 
-## 📄 License
+DOM event handling
 
-This project is part of the 30 Days 30 Projects challenge and is open source.
+Mouse events for drag & drop
 
-## 🙏 Acknowledgments
+Image-based UI alignment
 
-- Design inspired by retro calculator interfaces
-- Part of the Programiz 30 Days 30 Projects challenge
-- Icons and imagery created for this project
+Clean project structuring
 
----
+Improving UX with small interactions
 
-**Day 1 of 30** | *Built with 💖 and ☕*
+👩‍💻 Author
+
+Charvi Singh
+
+GitHub: https://github.com/charvi-web
+
+Project Type: Frontend Mini Project
+
+📄 License
+
+This project is open-source and free to use for learning and personal projects.
